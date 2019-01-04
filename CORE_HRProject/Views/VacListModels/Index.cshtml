@@ -1,0 +1,181 @@
+﻿@model IEnumerable<CORE_HRProject.Models.VacListModel>
+@using CORE_HRProject.Models
+@*@model CORE_HRProject.Models.VacListModel*@
+
+@{
+    ViewData["Title"] = "HR MANAGEMENT";
+}
+@section left{
+    <div class="card">
+        <div class="card-header">
+            <h3><font>휴가수령정보</font></h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-active">
+                <thead>
+                    <tr>
+                        <th>발생수량</th>
+                        <th>사용수량</th>
+                        <th>잔존수량</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>1건</td>
+                        <td>1건</td>
+                        <td>1건</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@section left_btm{
+    <div class="card">
+        <div class="card-header">
+            <h3>연/월차 입력</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="usr">이름</label>
+                <input type="text" class="form-control" id="userName" value="test" />
+            </div>
+
+            <div class="form-group">
+                <label for="usr1">입력1</label>
+                <input type="text" class="form-control" id="input1" value=@ViewBag.id />
+            </div>
+
+            <div class="form-group">
+                <label for="usr2">입력2</label>
+                <input type="text" class="form-control" id="input2" value="@ViewBag.pw" />
+            </div>
+
+            <div class="form-group">
+                <label for="usr3">날짜</label> <br />
+                <div class="input-group date">
+                    <input type="text" class="form-control" placeholder="클릭 후 날짜 선택(1주 단위)">
+                    <span class="input-group-addon"><span class="fade fa-calendar"></span></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-danger" />
+                <input type="submit" value="Cancel" class="btn btn-danger" />
+            </div>
+        </div>
+    </div>
+
+        <script>
+            $('.input-group.date').datepicker({
+                format: 'yyyy-mm-dd',
+                language: 'ko',
+                clearBtn: true,
+                autoclose: true,
+                todayHighlight: true
+
+            });
+        </script>
+}
+
+
+@section right{
+
+    @{string temp; }
+
+    @{
+        temp = String.IsNullOrEmpty(ViewBag.id) ? "." : ViewBag.id;
+    }
+        <div class="card">
+            <div class="card-header">
+                <h3><font>연/월차 사용현황</font></h3>
+            </div>
+            
+            @*<form method="post" action="">
+                <p>*@
+                    @*이름: <input class="form-control" type="text" id="str1" name="SearchString" />*@
+                    @*이름: <input class="form-control" asp-for="DynamicData.str1"
+                <input type="submit" value="Filter" />*@
+                @*</p>
+            </form>*@
+            @*</form>*@
+            @await Component.InvokeAsync("EFyk", new { searchString = temp })
+        </div>
+}
+
+
+
+@*-----------------*@
+
+
+@*@{
+        ViewData["Title"] = "Index";
+    }
+
+    <h2>Index</h2>
+
+    <p>
+        <a asp-action="Create">ㅎㅎ New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.reason)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.reason)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.status)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.id">한글</a> |
+                        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+
+@*<script type="text/javascript">
+
+        var value = [];
+        var firstDate = [];
+        var lastDate = [];
+            $('#datepicker1').datepicker(
+                { language: "kr", format: 'yyyy-mm-dd', todayHighlight: true }).on('change dp.change', function (e) {
+                    value = $("#datetimepicker1").val();
+                    firstDate = moment(value, "YYYY-MM-DD").day(1).format("YYYY-MM-DD");
+                    lastDate = moment(value, "YYYY-MM-DD").day(7).format("YYYY-MM-DD");
+
+                    if (firstDate == "Invalid date") {
+                        firstDate = "";
+                        lastDate = "";
+                        $("#datetimepicker1").val("");
+                    }
+                    else {
+                        $("#datetimepicker1").val(firstDate + " ~ " + lastDate);
+                    }
+
+                });
+    </script>*@

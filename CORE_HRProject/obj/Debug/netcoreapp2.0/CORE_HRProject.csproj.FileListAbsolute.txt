@@ -1,0 +1,21 @@
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp2.0\CORE_HRProject.deps.json
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp2.0\CORE_HRProject.runtimeconfig.json
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp2.0\CORE_HRProject.runtimeconfig.dev.json
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp2.0\CORE_HRProject.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp2.0\CORE_HRProject.pdb
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp2.0\Interop.SHDocVw.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\Interop.SHDocVw.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.csproj.ResolveComReference.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.csproj.CoreCompileInputs.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.AssemblyInfoInputs.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.AssemblyInfo.cs
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.pdb
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.csprojAssemblyReference.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject - 2018_11_23 최신본 , deploy가 안되서 백업 - 복사본\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.csprojAssemblyReference.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject - 2018_11_23 최신본 , deploy가 안되서 백업 - 복사본\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject - 2018_11_23 최신본 , deploy가 안되서 백업 - 복사본\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.pdb
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject_최신\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.csprojAssemblyReference.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject_최신\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject_최신\CORE_HRProject\obj\Debug\netcoreapp2.0\CORE_HRProject.pdb

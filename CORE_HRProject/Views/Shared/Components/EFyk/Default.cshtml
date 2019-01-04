@@ -1,0 +1,106 @@
+﻿@model List<CORE_HRProject.Models.EFyk>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<a asp-action="Create">Create</a>*@
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th>발생수량</th>
+            <th>사용수량</th>
+            <th>잔존수량</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            string tempColor = "";
+        }
+
+        @foreach (var EFyk in Model)
+        {
+            @if (@EFyk.name == "김용국")
+            {
+              tempColor = "bg-danger";
+
+            }
+            else
+            {
+                tempColor = "";
+            }
+
+        <tr onclick="OnClickInit(this)" class="@tempColor">
+            
+            <td headers="empName">@EFyk.name</td>
+            <td headers="empId">@EFyk.id</td>
+            <td><a asp-action="Index" asp-route-id="@EFyk.name" asp-route-pw="@EFyk.id"><img src="~/images/new.png" /></a></td>
+
+
+        </tr>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    var empName;
+
+    function OnClickInit(el)
+    {
+
+        //$(el).find("td").each(function () {
+        //    //$(this).addClass("highlightRow");
+        //    switch ($(this).attr("headers")) {
+        //        case "empName":
+        //            empName = $(this).text();
+        //            break;
+        //    }
+        //})
+
+        @*alert(@ViewData["url"]);*@
+
+    }
+</script>
+@*<ul>
+        @foreach (var EFyk in Model)
+        {
+            <li>@EFyk.name</li>
+            <li>@EFyk.id</li>
+        }
+    </ul>*@
+
+
+
+@*<p>
+        <a asp-action="Create">Create</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>*@
+</table>

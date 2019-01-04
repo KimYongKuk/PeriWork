@@ -1,0 +1,96 @@
+﻿@*@model IEnumerable<CORE_HRProject.Models.EFyk>*@
+@*@model List<CORE_HRProject.Models.PeriViewModel>*@
+@model PeriViewModel;
+
+
+<meta charset="utf-8" />
+@{
+    ViewData["Title"] = "PeriWork";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //int @testX = 0;
+}
+
+<br/>
+
+<div class="container-fluid">
+    <h1>기간근태 리스트 조회</h1>
+</div>
+
+<div class="container-fluid">
+    <br /><br />
+    <div class="row">
+        <select class="selectpicker" data-style="btn-info" id="sel1" title="부서를 입력하세요.">
+            @foreach (var test1 in Model.PeriHeaderModel)
+            {
+            <option>@test1.departmentName</option>
+            }
+        </select>
+        <div class="col-sm-2 input-group date">
+            <input type="text" class="form-control" placeholder="클릭 후 날짜 선택(1주 단위)">
+            <span class="input-group-addon"><span class="fade fa-calendar"></span></span>
+        </div>
+        <select class="selectpicker" data-style="btn-info" id="sel3" title="근태코드 선택">
+            <option>test1</option>
+            <option>test2</option>
+            <option>test3</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-primary">조회</button>
+
+    </div>
+</div>
+
+<br />
+
+<table class="table">
+    <tr>
+        <th>부서</th>
+        <th>이름</th>
+        <th>근태명</th>
+        <th>시작일자</th>
+        <th>종료일자</th>
+        <th>사유</th>
+        <th>부서승인</th>
+        <th>총무승인</th>
+    </tr>
+
+    @foreach (var test1 in Model.PeriHeaderModel)
+    {
+    <tr>
+        <td>@test1.getRestOfDay</td>
+        <td>@test1.departmentName</td>
+        <td>@test1.etc</td>
+    </tr>
+    }
+</table>
+
+<script type="text/javascript">
+
+    
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker();
+    });
+
+    $('.input-group.date').datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'ko',
+        clearBtn: true,
+        autoclose: true,
+        todayHighlight: true
+
+    });
+
+</script>
+
+@*<table class="table table-dark">
+        <thead>
+            <tr>
+                <th>발생수량</th>
+                <th>사용수량</th>
+                <th>잔존수량</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+    </table>*@

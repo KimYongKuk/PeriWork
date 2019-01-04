@@ -1,0 +1,12 @@
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp1.0\CORE_HRProject.deps.json
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp1.0\CORE_HRProject.runtimeconfig.json
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp1.0\CORE_HRProject.runtimeconfig.dev.json
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp1.0\CORE_HRProject.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\bin\Debug\netcoreapp1.0\CORE_HRProject.pdb
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp1.0\CORE_HRProject.csproj.CoreCompileInputs.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp1.0\CORE_HRProject.AssemblyInfoInputs.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp1.0\CORE_HRProject.AssemblyInfo.cs
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp1.0\CORE_HRProject.dll
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp1.0\CORE_HRProject.pdb
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp1.0\CORE_HRProject.csprojAssemblyReference.cache
+C:\Users\KYK\Documents\Visual Studio 2017\Projects\CORE_HRProject\CORE_HRProject\obj\Debug\netcoreapp1.0\UserSecretsAssemblyInfo.cs

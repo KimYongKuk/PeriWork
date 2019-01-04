@@ -1,0 +1,1838 @@
+﻿@*@model IEnumerable<CORE_HRProject.Models.EFyk>*@
+@*@model CORE_HRProject.Models.PeriWork*@
+@model PeriViewModel;
+@inject IJsonHelper Json;
+@Html.AntiForgeryToken()
+
+<meta charset="utf-8" />
+@{
+    ViewData["Title"] = "PeriWork";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    int @testX = 0;
+    var @test2 = "";
+    var @baseUserId = "";
+}
+
+<script>
+
+</script>
+
+<style>
+    .image-upload > input {
+        display: none;
+    }
+
+    .image-upload img {
+        width: 20px;
+        cursor: pointer;
+    }
+
+    .image-download1 img {
+        align-content: center;
+        width: 25px;
+        cursor: pointer;
+    }
+
+    .image-download2 img {
+        align-content: center;
+        width: 25px;
+        cursor: pointer;
+    }
+
+    .content1 {
+        display: none !important;
+    }
+
+    .content-show2 {
+        display: block !important;
+    }
+
+
+    /*input.removeButton {
+        background: url(/images/x.jpg);
+        width: 32px;
+        height: 32px;
+    }*/
+</style>
+
+@section left{
+
+    <br />
+    <form method="post" id="date-range-form" action="@Url.Action("Monitoring", "PeriWorks")" onsubmit="return handle_form_submission()">
+        <input type="hidden" id="selectedVal" name="selectedVal" />
+
+        <div class="card" style="overflow-y: scroll; height:768px;">
+            <div class="card-header bg-dark text-light" id="initTitle1" style="vertical-align:middle;">
+                <h5 id="initTitle">연차/공가 신청</h5>
+                <input type="button" id="submitBtn" class="btn btn-danger" value="상신" style="float:right; margin-left:10px; margin-top:-35px;" onclick="approveTable()" />
+                <input type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal" value="신청자 변경" style="float:right; margin-left:10px; margin-top:-35px;" />
+                
+                @*<button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-danger" style="float:right; margin-left:10px; margin-top:-35px;">
+            신청자 변경
+        </button>*@
+
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    &nbsp;&nbsp;&nbsp;
+                    <div class="form-group" id="form-group-select1">
+                        <select class="selectpicker" data-style="btn-secondary" id="viewSel" title="근태선택" name="viewSelLeft">
+                            @foreach (var test1 in Model.PeriHeaderModel5)
+                            {
+                                <option id="test" value="@test1.codeNumber" data-view1="@test1.code">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+                    </div>
+                    &nbsp;
+                    <div class="form-group" id="form-group-select2">
+                        <select class="selectpicker" data-style="btn-secondary" id="initSel" title="근태선택" name="pCodeVal1">
+                            @foreach (var test1 in Model.PeriHeaderModel2)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="form-group-select3">
+                        <select class="selectpicker" data-style="btn-secondary" id="initSel2" title="근태선택" name="pCodeVal2">
+                            @foreach (var test1 in Model.PeriHeaderModel3)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+
+                    </div>
+                    <div class="form-group" id="form-group-select4">
+                        <select class="selectpicker" data-style="btn-secondary" id="initSel3" title="근태선택">
+                            @* 병가 *@
+                            @foreach (var test1 in Model.PeriHeaderModel7)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+
+                    </div>
+                    <div class="form-group" id="form-group-select5">
+                        <select class="selectpicker" data-style="btn-secondary" id="initSel4" title="근태선택">
+                            @* 결근 *@
+                            @foreach (var test1 in Model.PeriHeaderModel8)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+
+                    </div>
+                    @*<input type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" value="신청자 변경" />*@
+                </div>
+
+                ㆍ등록자
+                <table style="border: 1px solid #e9e9e9; width:80%; height: 40px;">
+                    <tr style="font-size:11px;">
+                        <th class="bg-secondary initGroup" style="text-align:center; color:white; width:17%;">부서명</th>
+                        <td class="bg-light initGroup" style="width:40%; text-align:center;">@ViewBag.departmentName</td>
+                        <th class="bg-secondary initGroup" style="text-align:center; width:17%; color:white;">이름</th>
+                        <td class="bg-light initGroup" style="width:30%;  text-align:center;" id="secondUser1">@ViewBag.userName</td>
+                        
+                    </tr>
+                </table>
+                <br />
+                ㆍ신청자
+                <table style="border: 1px solid #e9e9e9; width:80%; height:40px;">
+                    <tr style="font-size:11px;">
+                        <th class="bg-secondary initGroup" style="text-align:center; color:white; width:17%;">부서명</th>
+                        <td class="bg-light initGroup" style="width:40%; text-align:center;" id="requestDepart">@ViewBag.departmentName</td>
+                        <th class="bg-secondary initGroup" style="text-align:center; text-align:center; width:17%; color:white;">이름</th>
+                        <td class="bg-light initGroup" style="width:30%; text-align:center;" id="requestName">@ViewBag.userName</td>
+
+                    </tr>
+                </table>
+                <br />
+
+                ㆍ신청정보
+                <table style="border: 1px solid #e9e9e9;">
+                    <tr style="font-size:11px; height:40px;">
+                        <th class="bg-secondary holidayGroup" style="text-align:center;  width:12%; color:white;">총 횟수(연차)</th>
+                        <td class="bg-light holidayGroup" style="width:12%; text-align:center;" id="requestTotalVal">@ViewBag.totalRestDay</td>
+                        <th class="bg-secondary holidayGroup" style="width:12%; text-align:center; color:white;">사용<br /> 횟수(연차)</th>
+                        <td class="bg-light holidayGroup" style="width:10%; text-align:center;" id="requestUsedVal">@ViewBag.usedRestDay</td>
+                        <th class="bg-secondary holidayGroup" style=" width:12%; text-align:center; color:white; ">남은<br /> 횟수(연차)</th>
+                        <td class="bg-light holidayGroup" style="width:10%; text-align:center;" id="requestRestVal">@ViewBag.getRestOfDay</td>
+                        <th class="bg-secondary workdayGroup" style="text-align:center; width:12%; color:white;">최대<br />신청일(공가)</th>
+                        <td class="bg-light workdayGroup" style="width:10%; text-align:center;" id="requestWorkDay"></td>
+                    </tr>
+                </table>
+                <br />
+
+                ㆍ제출 서류(첨부)
+                <table style="border: 1px solid #e9e9e9;">
+                    <tr style="font-size:11px;">
+                        <th class="bg-secondary holidayGroup" style="text-align:center;height:40px; width:25%; color:white;">사전 첨부서류</th>
+                        <td class="bg-light holidayGroup" style=" text-align:center; width:30%;" id="appDocumentList"></td>
+                        <th class="bg-secondary holidayGroup" style="text-align:center;height:40px; width:25%; color:white;">사후 첨부서류</th>
+                        <td class="bg-light holidayGroup" style=" text-align:center; width:30%;" id="appDocumentSubList"></td>
+                    </tr>
+                </table>
+                @*<table>
+            <tr style="font-size:11px;">
+                <th class="bg-info workdayGroup" style="text-align:center; width:12%; visibility:hidden; color:white; ">최대<br />신청일</th>
+                <td class="bg-light workdayGroup" style="width:12%; display:none;" id="requestWorkDay">@ViewBag.workDay</td>
+            </tr>
+        </table>*@
+
+
+
+
+                @* -------- modal ---------- *@
+
+                <div class="modal fade" id="myModal">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+                                <h4 class="modal-title" style="color:white;">변경 할 사용자 검색</h4>
+                            </div>
+                            <div class="modal-body">
+                                @*@{Html.Action("Index", "Accounts");}*@
+                                <div style="width:100%;">
+                                    <label>
+                                        이름입력
+                                        <input type="text" id="searchUsrName" name="searchUsrName" />
+                                    </label>
+                                    @Html.AntiForgeryToken()
+                                    &nbsp;&nbsp;<button type="button" class="btn btn-secondary" onclick="searchList()">search</button>
+                                </div>
+                                <br />
+
+                                <div id="goodTable">
+                                    <table class="table" id="modalTable">
+                                        @*<tr>
+                                    <th>
+                                        아이디
+                                    </th>
+                                    <th>
+                                        사번
+                                    </th>
+                                    <th>
+                                        이름
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>*@
+                                    </table>
+                                </div>
+
+                            </div>
+
+
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="setViewRequestData()">적용</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div>
+                </div>
+
+                <input type="hidden" id="hiddenPersonalCode" />
+                <input type="hidden" id="hiddenName" />
+                <input type="hidden" id="hiddenDepartmentCode" />
+                <input type="hidden" id="hiddenWorkCode" />
+
+                @*<input type="hidden" id="hidden" />
+        <input type="hidden" id="hiddenName" />*@
+
+
+                @* 조회 된 데이터 적용 *@
+                <script>
+
+                    var departmentCode = '@ViewBag.departmentCode';
+                    var personalCode = '@ViewBag.personalCode';
+                    var name = '@Html.Raw(@ViewBag.userName.ToString())';
+                    var globalRestVal = ""; // 등록 시, 남은 연차 횟수 체킹.
+
+                    //var pViewSel = document.getElementById('viewSel').value;
+                    //var pInitSel = document.getElementById('initSel').value;
+                    //var pInitSel2 = document.getElementById('initSel2').value;
+
+                    //alert(pInitSel);
+                    //alert(pInitSel2);
+
+                    //var workCode = pInitSel == '000' ? pInitSel2 : pInitSel;
+
+                    $('#hiddenName').val(name);
+                    $('#hiddenDepartmentCode').val(departmentCode);
+                    $('#hiddenPersonalCode').val(personalCode);
+                    //$('#hiddenWorkCode').val(workCode);
+
+                    function clickChx(a) {
+                        var obj = document.getElementsByName("CheckRequestVal");
+                        var isA = '';
+
+                        for (var i = 0; i < obj.length; i++) {
+                            if (obj[i].value == a) {
+                                var idVal1 = "CheckRequestVal" + i;
+
+                                if (document.getElementById(idVal1).checked)
+                                    isA = 'a';
+                            }
+                        }
+                        for (var i = 0; i < obj.length; i++) {
+                            if (obj[i].value != a) {
+                                var idVal2 = "CheckRequestVal" + i;
+
+                                if (isA == 'a') {
+                                    document.getElementById(idVal2).disabled = true;
+                                }
+
+                                else {
+                                    document.getElementById(idVal2).disabled = false;
+                                }
+                            }
+                        }
+                    }
+
+                    function setViewRequestData() {
+
+                        var selectedVal = $('input[name=CheckRequestVal]:checked').map(function (_, el) {
+                            return $(el).val();
+                        }).get();
+
+                        if (selectedVal == "") {
+                            swal("선택된 대상이 없습니다", "대상을 선택 해 주세요", "error");
+                            return false;
+                        }
+
+                        var param = { "personalCode": selectedVal }
+
+                        $(document).ready(function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "PeriWorks/OnGetRequestView",
+                                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                                //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                                data: param,
+
+                                dataType: "json",
+
+                                success: function (data) {
+
+                                    var obj = JSON.parse(data);
+
+
+                                    $.each(obj, function (i, element) {
+
+
+                                        document.getElementById('requestName').innerHTML = element.userName;
+                                        document.getElementById('requestDepart').innerHTML = element.departmentName;
+
+                                        document.getElementById('requestTotalVal').innerHTML = element.totalRestDay;
+                                        document.getElementById('requestUsedVal').innerHTML = element.usedRestDay;
+                                        document.getElementById('requestRestVal').innerHTML = element.getRestOfday;
+                                        globalRestVal = element.getRestOfday;
+
+                                        document.getElementById('hiddenPersonalCode').value = element.personalCode;
+                                        document.getElementById('hiddenName').value = element.userName;
+
+                                    });
+                                    //var obj = JSON.parse(data);
+
+                                    //$('#modalTable').empty();
+                                    //$('#modalTable').append("<th>아이디</th><th>사번</th><th>이름</th><th>선택</th>");
+                                    //$.each(obj, function (i, element) {
+                                    //    $('#modalTable').append("<tr><td>" + element.userId + "</td><td>" + element.personalCode + "</td><td>" + element.userName + "</td>"
+                                    //        + "<td><input type='checkbox' name='Check' value='" + element.personalCode + "'></input></td >");
+                                    //});
+                                },
+
+                                failure: function (data) {
+                                    alert('fail!1');
+                                    //alert(data.responseText);
+                                }, //End of AJAX failure function
+                                error: function (xhr) {
+                                    // alert('fail!2');
+                                    alert(xhr.status);
+                                } //End of AJAX error function
+
+                            });
+                        });
+                    }
+                </script>
+
+                @* ajax interactive modal *@
+                <script>
+                    function searchList() {
+                        var departmentCode = document.getElementById('hiddenDepartmentCode').value;
+                        var usrName = document.getElementById('searchUsrName').value;
+                        var secondUser = '@ViewBag.userId';
+                        var param = { "userName": usrName, "departmentCode": departmentCode, "secondUser": secondUser }
+                        var index = 0;
+
+                        $(document).ready(function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "PeriWorks/OnGetList",
+                                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                                //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                                data: param,
+
+                                dataType: "json",
+                                success: function (data) {
+
+                                    var obj = JSON.parse(data);
+
+                                    $('#modalTable').empty();
+                                    $('#modalTable').append("<tr class='bg-primary' style='color:white;'><th>아이디</th><th>부서</th><th>사번</th><th>이름</th><th>선택</th></tr>");
+                                    $.each(obj, function (i, element) {
+                                        $('#modalTable').append("<tr><td>" + element.userID + "</td><td>" + element.divName + "</td><td>" + element.personalCode + "</td><td>" + element.userName + "</td>"
+                                            + "<td><input type='checkbox' name='CheckRequestVal' id='CheckRequestVal" + i + "' onclick='clickChx(" + element.personalCode + ")' value='" + element.personalCode + "'></input></td >");
+
+
+                                    });
+
+
+                                },
+
+                                failure: function (data) {
+                                    alert('fail!1');
+                                    //alert(data.responseText);
+                                }, //End of AJAX failure function
+                                error: function (xhr) {
+                                    // alert('fail!2');
+                                    alert(xhr.status);
+                                } //End of AJAX error function
+
+                            });
+                        });
+
+                    }
+
+                </script>
+
+                @* ------------------  *@
+                <br />
+
+                <h6 class="datePickerCom1">ㆍ신청날짜</h6>
+                <div class="input-daterange input-group col-lg-12 datePickerCom1" id="datepicker">
+                    <input type="text" id="startDate" class="input-xs form-control bg-light" name="from" placeholder="시작일 선택" autocomplete="new-password" />
+                    <span class="input-group-text">~</span>
+                    <input type="text" id="endDate" class="input-xs form-control" name="to" placeholder="종료일 선택" autocomplete="new-password" />
+                    <input type="hidden" id="hidden1" name="userId1" value="@ViewBag.baseUserId" />
+                    <input type="hidden" id="hidden2" name="secondUser" value="@ViewBag.secondUser" />
+                </div>
+                <br />
+                <h6 id="reasonComText">ㆍ신청사유</h6>
+                <div class="container" style="margin-left:15px;">
+                    <div class="row" id="reasonCom1">
+                        <input type="text" class="form-control col-xl-10" name="reason" id="reason" placeholder="사유입력" autocomplete="new-password" />
+                        <input type="button" class="btn btn-danger col-xs-3" id="regBtn" value="등록" style="margin-left:5px; color:white" onclick="setListTable()" />
+                    </div>
+                </div>
+                <br />
+                @* ------------------  *@
+
+                <table class="table" id="listTable" style="font-size:11px;">
+                    <tr class="bg-dark" style="color:white;">
+                        <th>
+                            사번
+                        </th>
+                        <th>
+                            이름
+                        </th>
+                        <th>
+                            시작일
+                        </th>
+                        <th>
+                            종료일
+                        </th>
+                        <th>
+                            사유
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+
+                </table>
+
+            </div>
+        </div>
+        @*<div align="right"><input type="button" id="submitBtn" class="btn btn-danger col-xs-3" value="상신" style="margin-left:5px; color:white; height:30px; position:relative;" onclick="approveTable()" /></div>*@
+        @*<div align="right"><input type="submit" class="btn btn-warning col-xs-3" value="상신" style="margin-left:5px; color:white" /></div>*@
+        @*<div align="right"><input type="button" id="submitBtn" class="btn btn-danger col-xs-3" value="상신" style="margin-left:5px; color:white" onclick="approveTable()" /></div>*@
+
+    </form>
+
+    <script>
+        var workDay = "";
+        var comparedDay = "";
+
+        $('#regBtn').hide();
+
+        function approveTable() {
+            var initSel;
+            var initSel2;
+            var workCode;
+            var workCodeFirst;
+            var secondUser;
+
+            var totalCount;
+            var currentCount;
+
+            var totalCount2;
+            var currentCount2;
+
+            totalCount = document.getElementById('requestTotalVal').innerText;
+            currentCount = document.getElementById('requestUsedVal').innerText;
+            totalCount2 = document.getElementById('requestWorkDay').innerText;
+            currentCount2 = comparedDay;
+
+            secondUser = document.getElementById('secondUser1').innerText;
+            workCodeFirst = document.getElementById('viewSel').value;
+            startDate = document.getElementById('startDate').value;
+            endDate = document.getElementById('endDate').value;
+            reason = document.getElementById('reason').value;
+            initSel = document.getElementById('initSel').value;
+            initSel2 = document.getElementById('initSel2').value;
+            initSel3 = document.getElementById('initSel3').value;
+            initSel4 = document.getElementById('initSel4').value;
+            
+            var personalCode = document.getElementById('hiddenPersonalCode').value;
+            
+            if ((initSel == "000" || initSel == "") && (initSel2 == "000" || initSel2 == "") && (initSel3 == "000" || initSel3 == "") && (initSel4 == "000" || initSel4 == "")) { // 양쪽 다 비어있으면?
+                swal("상신 실패!.", "근태를 선택해주세요.", "error");
+            }
+            else {
+                if ((initSel == "000" || initSel == "") && (initSel3 == "000" || initSel3 == "") && (initSel4 == "000" || initSel4 == "")) {
+                    workCode = initSel2;
+                }
+
+                else if ((initSel2 == "000" || initSel2 == "") && (initSel3 == "000" || initSel3 == "") && (initSel4 == "000" || initSel4 == "")) {
+                    workCode = initSel;
+                }
+
+                else if ((initSel == "000" || initSel == "") && (initSel2 == "000" || initSel2 == "") && (initSel4 == "000" || initSel4 == "")) {
+                    workCode = initSel3;
+                }
+
+                else if ((initSel == "000" || initSel == "") && (initSel2 == "000" || initSel2 == "") && (initSel3 == "000" || initSel3 == "")) {
+                    workCode = initSel4;
+                }
+
+                var param = { "workCode": workCode, "userId": '@ViewBag.userId', "personalCode": personalCode, "workCodeFirst": workCodeFirst, "secondUser": secondUser, "totalCount": totalCount, "currentCount": currentCount, "totalCount2": totalCount2, "currentCount2": currentCount2 };
+                var param2 = { "workCode": workCode, "userId": '@ViewBag.userId', "personalCode": personalCode };
+                
+                $.ajax({
+                    type: "POST",
+                    url: "PeriWorks/OnGetListTable",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                    data: param2, //
+
+                    dataType: "json",
+                    success: function (data) {
+
+                        var obj = JSON.parse(data);
+
+                        if (obj == "") {
+                            swal("상신 실패!.", "항목이 없습니다.", "error");
+                        }
+
+                        else {
+                            $.ajax({
+                                type: "POST",
+                                url: "PeriWorks/OnGetApprove",
+                                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                                //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                                data: param,
+
+                                dataType: "json",
+                                success: function (data) {
+
+                                    swal("상신이 정상적으로 요청되었습니다.", "팝업화면에서 결재를 진행하세요.", "success");
+
+                                    if (data.pUrl != "") {
+                                        var popOption = "width=950, height=750, resizable=yes, scrollbars=yes, status=no;";    //팝업창 옵션(optoin)
+                                        window.open(data.pUrl, "", popOption);
+                                    }
+
+                                    loadData();
+
+                                },
+
+                                failure: function (data) {
+                                    alert('fail');
+                                }, //End of AJAX failure function
+                                error: function (xhr) {
+                                    //alert(xhr.status);
+                                } //End of AJAX error function
+
+                            });
+                        }
+                    },
+                    failure: function (data) {
+                        alert('fail');
+                    }, //End of AJAX failure function
+                    error: function (xhr) {
+                        //alert(xhr.status);
+                    } //End of AJAX error function
+
+                });
+                
+            }
+
+
+        }
+
+        function setListTable() {
+
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var reason = document.getElementById('reason').value;
+            var viewSelLeft = document.getElementById('viewSel').value;
+            var initSel = document.getElementById('initSel').value; // 휴가
+            var initSel2 = document.getElementById('initSel2').value; // 공가
+            var initSel3 = document.getElementById('initSel3').value; // 병가
+            var initSel4 = document.getElementById('initSel4').value; // 결근
+            var viewSelVal = "";
+
+            if (viewSelLeft == "001") {
+                viewSelVal = "휴가";
+            }
+
+            else if (viewSelLeft == "002") {
+                viewSelVal = "공가";
+            }
+
+            else if (viewSelLeft == "003") {
+                viewSelVal = "병가";
+            }
+
+            else if (viewSelLeft == "004") {
+                viewSelVal = "결근";
+            }
+
+            var param = { "registerId": '@Html.Raw(@ViewBag.userId.ToString())', "workCode": document.getElementById('hiddenWorkCode').value, "userName": document.getElementById('hiddenName').value, "personalCode": document.getElementById('hiddenPersonalCode').value, "departmentCode": document.getElementById('hiddenDepartmentCode').value, "startDate": startDate, "endDate": endDate, "reason": reason, "viewSelLeft": viewSelLeft, "viewSelVal": viewSelVal }
+
+            var realRestVal = globalRestVal != "" ? globalRestVal : '@ViewBag.getRestOfDay'; // globalRestVal은 신청자가 변경되었을 시, getRestOfDay는 변경 없었을 시.
+
+            if ((initSel == "000" || initSel == "") && (initSel2 == "000" || initSel2 == "") && (initSel3 == "000" || initSel3 == "") && (initSel4 == "000" || initSel4 == "")) { // 양쪽 다 비어있으면?
+                swal("등록 실패!", "근태를 선택해주세요.", "error");
+                return false;
+            }
+
+            if (startDate == null || startDate == "" || endDate == null || endDate == "") {
+                swal("등록 실패!", "날짜를 입력하여 주세요.", "error");
+                
+                return false;
+            }
+
+            if (reason == null || reason == "") {
+                swal("등록실패!", "사유를 입력하여 주세요.", "error");
+                return false;
+            }
+           
+            if (viewSelLeft == "001" && (realRestVal == "0")) {
+                swal("등록실패!", "남은 연차횟수가 없습니다. 결근으로 신청 하십시오.", "error");
+                return false;
+            }
+
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "PeriWorks/OnGetRequestTemp",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    data: param,
+
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success == true) {
+                            loadData();
+                        }
+                        if (data.success == false) {
+                            swal("등록 실패!.", "이미 해당 날짜에 동록된 근태가 존재합니다.", "error")
+                        }
+
+                    },
+
+                    failure: function (data) {
+                        alert('fail');
+                    }, //End of AJAX failure function
+                    error: function (xhr) {
+                        //alert(xhr.status);
+                    } //End of AJAX error function
+
+                });
+            });
+
+        }
+
+        function getDocumentList(workCode) {
+            var param = { "workCode": workCode };
+            var docuName1;
+            var docuName2;
+
+            $.ajax({
+                type: "POST",
+                url: "PeriWorks/OnGetDocumentList",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                data: param, //
+
+                dataType: "json",
+                success: function (data) {
+
+                    var obj = JSON.parse(data);
+
+                    $.each(obj, function (i, element) {
+                        docuName1 = element.divName;
+                        docuName2 = element.etc1;
+                    });
+
+                    document.getElementById('appDocumentList').innerHTML = docuName1;
+                    if (docuName2 == "")
+                        docuName2 = "없음";
+
+                    document.getElementById('appDocumentSubList').innerHTML = docuName2;
+                    
+                },
+                failure: function (data) {
+                    alert('fail');
+                },
+                error: function (xhr) {
+                    //alert(xhr.status);
+                }
+
+            });
+        }
+
+        function checkWorkDay(personalCode, workCode)
+        {
+            var param = { "personalCode": personalCode, "workCode": workCode };
+
+            $.ajax({
+                type: "POST",
+                url: "PeriWorks/OnGetWorkDay",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                data: param, //
+
+                dataType: "json",
+                success: function (data) {
+                    //var jsonData = json.parse(data);
+
+                    var obj = JSON.parse(data);
+
+                    $.each(obj, function (i, element) {
+                        workDay = element.workDay;
+                    });
+
+                    document.getElementById('requestWorkDay').innerHTML = workDay;
+                    
+
+
+                },
+                failure: function (data) {
+                    alert('fail');
+                },
+                error: function (xhr) {
+                    //alert(xhr.status);
+                }
+
+            });
+        }
+
+
+        function loadData() {
+
+            var index = 0;
+            var usrId = '@ViewBag.userId';
+            var workCode = document.getElementById('hiddenWorkCode').value;
+
+            var param = { "userId": usrId, "workCode": workCode };
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "PeriWorks/OnGetListTable",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                    data: param, //
+
+                    dataType: "json",
+                    success: function (data) {
+                        var obj = JSON.parse(data);
+
+                        $('#listTable').empty();
+                        $('#listTable').append("<tr class='bg-dark' style='color:white'><th>사번</th><th>이름</th><th>시작일</th><th>종료일</th><th>사유</th><th>삭제<th></tr>");
+
+                        $.each(obj, function (i, element) {
+                            $('#listTable').append("<tr><td class='personalCode'>"/* class= '" + element.personalCode + ">"*/ + element.personalCode + "</td><td>" + element.userName + "</td><td class='startDate'>" + element.startDate + "</td>"
+                                + "<td>" + element.endDate + "</td >" + "<td style='display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:190px;'>" + element.reason + "</td><td><input type='button' id='removeButton' class='removeButton' value ='X'" + "</td></tr>");
+                        });
+
+                    },
+                    failure: function (data) {
+                        alert('fail');
+                    }, 
+                    error: function (xhr) {
+                        //alert(xhr.status);
+                    } 
+
+                });
+            });
+        }
+
+        var baseId;
+        var urlStr = "http://10.205.222.49:51891/?id=";
+        var chkPower = "";
+        
+        $("#form-group-select2").hide();
+        $("#form-group-select3").hide();
+        $("#form-group-select4").hide();
+        $("#form-group-select5").hide();
+
+        $(document).on("click", ".removeButton", function () {
+            //$(this).parent().parent().remove();
+
+            var personalCode = $(this).parent().parent().find('.personalCode').html();
+            var startDate = $(this).parent().parent().find('.startDate').html();
+
+            var param = { "personalCode": personalCode, "startDate": startDate }
+            $.ajax({
+                type: "POST",
+                url: "PeriWorks/OnGetDeleteList",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                data: param,
+
+                dataType: "json",
+                success: function (data) {
+                    loadData();
+                },
+
+                failure: function (data) {
+                    alert('fail');
+                }, 
+                error: function (xhr) {
+                    //alert(xhr.status);
+                } 
+
+            });
+        });
+
+
+        $('#viewSel').on('change', function (e) {
+
+            $('#listTable').empty();
+            $('#listTable').append("<tr class='bg-dark' style='color:white'><th>사번</th><th>이름</th><th>시작일</th><th>종료일</th><th>사유</th><th>삭제<th></tr>");
+
+            $('#startDate').val("");
+            $('#endDate').val("");
+
+            document.getElementById('requestWorkDay').innerHTML = "";
+            document.getElementById('appDocumentList').innerHTML = '';
+            document.getElementById('appDocumentSubList').innerHTML = '';
+
+            if (this.options[this.selectedIndex].value == '001') {
+
+                //show & hide
+                $("#form-group-select2").show(); // 2번 : 휴가
+                $("#form-group-select3").hide(); // 3번 : 공가
+                $("#form-group-select4").hide(); // 4번 : 병가
+                $("#form-group-select5").hide(); // 5번 : 결근
+
+                //초기화
+                $('select[id=initSel2]').val(1);
+                $('select[id=initSel3]').val(1);
+                $('select[id=initSel4]').val(1);
+                
+                //$('#appDocumentList').innerHTML = "";
+                //$('#appDocumentSubList').innerHTML = "";
+
+              
+
+                $('.selectpicker').selectpicker('refresh');
+
+                // contents 수정.
+                document.getElementById('initTitle').innerHTML = '연차 신청'
+                
+            }
+            else if (this.options[this.selectedIndex].value == '002'){
+                
+                //show & hide
+                $("#form-group-select2").hide(); // 2번 : 휴가
+                $("#form-group-select3").show(); // 3번 : 공가
+                $("#form-group-select4").hide(); // 4번 : 병가
+                $("#form-group-select5").hide(); // 5번 : 결근
+
+                //초기화
+                $('select[id=initSel]').val(1);
+                $('select[id=initSel3]').val(1);
+                $('select[id=initSel4]').val(1);
+                $('.selectpicker').selectpicker('refresh');
+
+                // contents 수정.
+                document.getElementById('initTitle').innerHTML = '공가 신청'
+            }
+
+            else if (this.options[this.selectedIndex].value == '003') {
+                //show & hide
+                $("#form-group-select2").hide(); // 2번 : 휴가
+                $("#form-group-select3").hide(); // 3번 : 공가
+                $("#form-group-select4").show(); // 4번 : 병가
+                $("#form-group-select5").hide(); // 5번 : 결근
+
+                //초기화
+                $('select[id=initSel]').val(1);
+                $('select[id=initSel2]').val(1);
+                $('select[id=initSel4]').val(1);
+                $('.selectpicker').selectpicker('refresh');
+
+                document.getElementById('initTitle').innerHTML = '병가 신청';
+            }
+
+            else if (this.options[this.selectedIndex].value == '004') {
+
+                //show & hide
+                $("#form-group-select2").hide(); // 2번 : 휴가
+                $("#form-group-select3").hide(); // 3번 : 공가
+                $("#form-group-select4").hide(); // 4번 : 병가
+                $("#form-group-select5").show(); // 5번 : 결근
+
+                //초기화
+                $('select[id=initSel]').val(1);
+                $('select[id=initSel3]').val(1);
+                $('select[id=initSel2]').val(1);
+                $('.selectpicker').selectpicker('refresh');
+
+                document.getElementById('initTitle').innerHTML = '결근 신청';
+            }
+
+        });
+
+        //////////////////////////////////////////////////////
+        // 선택 초기화 및 하단 임시 리스트 뿌려주기.
+
+        $('#initSel').on('change', function () { // 선택 초기화 1
+            if ($(this).val() == "000") {
+                $(this).val('');
+                //등록버튼 없애기
+
+                $('#regBtn').hide();
+            }
+
+            else {
+                $('#regBtn').show();
+                $('#hiddenWorkCode').val($(this).val());
+                loadData();
+            }
+
+        });
+
+        $('#initSel2').on('change', function () { // 선택 초기화 2
+
+            var startDate = document.getElementById('startDate');
+            var endDate = document.getElementById('endDate');
+
+            startDate.value = "";
+            endDate.value = "";
+
+
+            if ($(this).val() == "000") {
+                $(this).val('');
+
+                $('#regBtn').hide();
+            }
+
+            else {
+                $('#regBtn').show();
+                $('#hiddenWorkCode').val($(this).val());
+                loadData();
+                checkWorkDay('@ViewBag.personalCode', $(this).val()); // 사번, 근태코드(공가)
+                getDocumentList($(this).val()); // get appDocumentList.
+            }
+        });
+
+        $('#initSel3').on('change', function () { // 선택 초기화 3
+
+            var startDate = document.getElementById('startDate');
+            var endDate = document.getElementById('endDate');
+
+            startDate.value = "";
+            endDate.value = "";
+
+
+            if ($(this).val() == "000") {
+                $(this).val('');
+
+                $('#regBtn').hide();
+            }
+
+            else {
+                $('#regBtn').show();
+                $('#hiddenWorkCode').val($(this).val());
+                loadData();
+                getDocumentList($(this).val()); // get appDocumentList.
+
+            }
+        });
+
+        $('#initSel4').on('change', function () { // 선택 초기화 4
+
+            var startDate = document.getElementById('startDate');
+            var endDate = document.getElementById('endDate');
+
+            startDate.value = "";
+            endDate.value = "";
+
+
+            if ($(this).val() == "000") {
+                $(this).val('');
+
+                $('#regBtn').hide();
+            }
+
+            else {
+                $('#regBtn').show();
+                $('#hiddenWorkCode').val($(this).val());
+                loadData();
+            }
+        });
+
+        //////////////////////////////////////////////////////
+
+        $('#startDate').on('change', function () {
+
+            var sel = document.getElementById('viewSel').value;
+
+            if (sel == "002") {
+                var endDate = $('#endDate').val();
+                var startDate = $(this).val();
+
+                var ar1 = startDate.split('-');
+                var ar2 = endDate.split('-');
+                var da1 = new Date(ar1[0], ar1[1], ar1[2]);
+                var da2 = new Date(ar2[0], ar2[1], ar2[2]);
+                var dif = da2 - da1;
+                var cDay = 24 * 60 * 60 * 1000;// 시 * 분 * 초 * 밀리세컨
+
+                comparedDay = parseInt(dif / cDay);
+                comparedDay = comparedDay + 1;
+
+                var cWorkDay = workDay; // workDay 전역변수
+                
+                if (comparedDay > cWorkDay) {
+                    swal("에러입니다.", "최대 신청일을 초과하였습니다.", "error");
+                    $(this).val("");
+                    $('#endDate').val("");
+                }
+            }
+
+
+        });
+
+        $('#endDate').on('change', function () {
+
+            var sel = document.getElementById('viewSel').value;
+
+            if (sel == "002") {
+                var startDate = $('#startDate').val();
+                var endDate = $(this).val();
+
+                var ar1 = startDate.split('-');
+                var ar2 = endDate.split('-');
+                var da1 = new Date(ar1[0], ar1[1], ar1[2]);
+                var da2 = new Date(ar2[0], ar2[1], ar2[2]);
+                var dif = da2 - da1;
+                var cDay = 24 * 60 * 60 * 1000;// 시 * 분 * 초 * 밀리세컨
+
+                comparedDay = parseInt(dif / cDay);
+                comparedDay = comparedDay + 1;
+
+                var cWorkDay = workDay; // workDay 전역변수
+
+                if (comparedDay > cWorkDay) {
+                    swal("에러입니다.", "최대 신청일을 초과하였습니다.", "error");
+                    $(this).val("");
+                    $('#startDate').val("");
+                }
+            }
+
+
+        });
+
+        if ('@ViewBag.chkEmpty' == 'c') {
+            swal("에러입니다.", "해당 날짜에 등록된 근태가 존재합니다.", "error")
+        }
+
+        else if ('@ViewBag.chkEmpty' == 'd')
+        {
+            swal("준비 완료!", "결재화면으로 이동합니다.", "success")
+        }
+        else if ('@ViewBag.chkEmpty' == 's') {
+            swal("준비 완료!", "결재화면으로 이동합니다.", "success")
+        }
+
+
+    </script>
+
+    <script>
+
+        var nStartDate = '@ViewBag.nStartDate';
+        var url = '@Html.Raw(@ViewBag.url.ToString())';
+
+
+        if (url != "") {
+            var popOption = "width=950, height=750, resizable=yes, scrollbars=yes, status=no;";    //팝업창 옵션(optoin)
+            window.open(url, "", popOption);
+        }
+
+        if (nStartDate == "") {
+            $(".fadeTd").fadeOut();
+        }
+
+        else {
+            $(".fadeTd").fadeIn();
+        }
+
+        function handle_form_submission() {
+
+            document.getElementById('hidden1').value = '@ViewBag.baseUserId';
+
+            var reasonValue = document.getElementById('reason').value;
+            var startValue = document.getElementById('startDate').value;
+            var endValue = document.getElementById('endDate').value;
+
+            var selectedValue;
+        }
+
+        $('.input-daterange input').datepicker({
+            format: 'yyyy-mm-dd',
+            language: 'ko',
+            startDate: '-7d'
+        });
+
+        $('.input-daterange').datepicker({
+            autoclose: true
+        });
+
+    </script>
+}
+
+@section right{
+    <br />
+
+    <div class="card" style="overflow-y: scroll; height:768px;">
+        @*<div class="container-fluid">*@
+
+        <form id="search-form" method="post" action="@Url.Action("Monitoring", "PeriWorks")" onsubmit="return handle_form_submission2()" enctype="multipart/form-data">
+            <div class="card-header bg-primary text-light col-sm" style="vertical-align:middle">
+
+                @* <div row style="text-align:right;">*@
+                <h5>연차/공가 조회</h5>
+                <button type="submit" id="selBtn1" class="btn btn-danger" style="float:right; margin-left:10px; margin-top:-35px;">
+                    조회
+                </button>
+
+                <button type="submit" id="delBtn" value="delBtn" name="delBtn" class="btn btn-info" style="float:right; margin-left:10px; margin-top:-35px;">
+                    삭제(미상신)
+                </button>
+
+                @*<button type="submit" id="cancelBtn" value="cancelBtn" name="cancelBtn" class="btn btn-secondary" style="float:right; margin-left:10px; margin-top:-7px;">
+                    결재 취소
+                </button>*@
+                <input type="button" id="cancelBtn" class="btn btn-info col-xs-3" value="결재 취소" style="float:right; margin-left:10px; margin-top:-35px;" onclick="cancelAppr()" />
+                @*</div>*@
+
+
+            </div>
+
+
+            <div class="card-body">
+                <input type="hidden" id="hidden1" name="userId1" value="@ViewBag.baseUserId" />
+                @*<input type="hidden" id="hidden2" name="startDateHidden" value="@ViewBag.startDate2"*@
+                <div class="container">
+                    <div class="row">
+                        <select class="selectpicker col-lg-2" data-style="btn-primary" style="width:auto;" id="sel1" title="부서선택" name="pDepartmentVal">
+                            <option value="0">선택초기화</option>
+                            @foreach (var test1 in Model.PeriHeaderModel)
+                            {
+                                <option value="@test1.departmentCode">@test1.departmentName</option>
+                            }
+                        </select>
+
+                        <select class="selectpicker col-lg-2 selgood1" data-style="btn-primary" style="width:auto;" id="selUsers" title="사용자선택" name="pUserVal">
+                            <option value="0">선택초기화</option>
+                            @*@foreach (var test1 in Model.PeriHeaderModel6)
+                            {
+                                <option value="@test1.personalCode">@test1.userName</option>
+                            }*@
+                        </select>
+
+                        <div class="input-daterange input-group col-lg-4" id="datepicker">
+                            <input type="text" id="startDate2" class="form-control col-lg-10" name="from" placeholder="시작일 선택" autocomplete="new-password" />
+                            <span class="input-group-text">~</span>
+                            <input type="text" id="endDate2" class=" form-control col-lg-10" name="to" placeholder="종료일 선택" autocomplete="new-password" />
+                        </div>
+
+                        <select class="selectpicker col-lg-2" data-style="btn-primary" id="viewSelRight" title="근태선택" name="viewSelRight">
+                            @* 1차 select *@
+                            <option id="test" value="000">선택 초기화</option>
+                            @foreach (var test1 in Model.PeriHeaderModel5)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+
+                        <select class="selectpicker col-lg-2 initSelRight" data-style="btn-primary" id="initSelRight" title="근태선택" name="pCodeVal3">
+                            @* 휴가 *@
+                            @foreach (var test1 in Model.PeriHeaderModel2)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+
+                        <select class="selectpicker col-lg-2 sel3" data-style="btn-primary" id="sel3" title="근태선택" name="pCodeVal4">
+                            @* 공가 *@
+                            @foreach (var test1 in Model.PeriHeaderModel3)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+
+                        <select class="selectpicker col-lg-2 sel4" data-style="btn-primary" id="sel4" title="근태선택" name="pCodeVal5">
+                            @* 결근 *@
+                            @foreach (var test1 in Model.PeriHeaderModel7)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+
+                        <select class="selectpicker col-lg-2 sel5" data-style="btn-primary" id="sel5" title="근태선택" name="pCodeVal6">
+                            @* 병가 *@
+                            @foreach (var test1 in Model.PeriHeaderModel8)
+                            {
+                                <option id="test" value="@test1.codeNumber">(@test1.codeNumber)@test1.code</option>
+                            }
+                        </select>
+                        @*<div>
+                            <button type="submit" id="selBtn1" class="btn btn-success">
+                                조회
+                            </button>
+                        </div>
+                        &nbsp;
+
+                        <div class="">
+                            <button type="submit" id="delBtn" value="delBtn" name="delBtn" class="btn btn-danger">
+                                삭제
+                            </button>
+                        </div>*@
+
+
+                        <input type="hidden" id="chkDelHidden" name="chkDelHidden" />
+                        <input type="hidden" id="selectedChk" name="selectedChk" />
+                        <input type="hidden" id="uploadHidden" name="uploadHidden" />
+                        <input type="hidden" id="uploadStartDate" name="uploadStartDate" />
+                        <input type="hidden" id="uploadHiddenAfter" name="uploadHiddenAfter" />
+                        <input type="hidden" id="uploadStartDateAfter" name="uploadStartDateAfter" />
+                        <input type="hidden" id="uploadPersonalCode" name="uploadPersonalCode" />
+                        <input type="hidden" id="uploadPersonalCodeAfter" name="uploadPersonalCodeAfter" />
+                        <input type="hidden" id="checkAfterComponents" name="checkAfterComponents" />
+                        <input type="hidden" id="selectedValSearch" name="selectedValSearch" />
+                        <input type="hidden" id="selectedDepartment" name="selectedDepartment" />
+
+                    </div>
+
+                </div>
+                <br />
+
+            </div>
+
+            <table class="table" id="viewTable" style="font-size:10px;">
+                <tr class="bg-primary text-light">
+                    <th class="afterHeader2" style="display:none;">근태명</th>
+                    <th>부서</th>
+                    <th>이름</th>
+                    <th>시작일자</th>
+                    <th>종료일자</th>
+                    <th>부서<br />승인</th>
+                    <th>총무<br />승인</th>
+                    <th>취소<br />진행</th>
+                    <th>사    유</th>
+                    <th>선택</th>
+                    <th class="afterHeader" style="display:none;">파일첨부#1<br />(사전)</th>
+                    <th class="afterHeader" style="display:none;">다운<br />로드#1</th>
+                    <th class="afterHeader" style="display:none;">파일첨부#2<br />(사후)</th>
+                    <th class="afterHeader" style="display:none;">다운<br />로드#2</th>
+                </tr>
+
+                @foreach (var test1 in Model.PeriBodyModel)
+                {
+                    <tr id="@(test1.reqNo)">
+                        <td class="afterHeader2">@test1.gViewSelName</td>
+                        <td>@test1.departmentName</td>
+                        <td>@test1.userName</td>
+                        <td class="parentStartDate">@test1.startDate</td>
+                        <td>@test1.endDate</td>
+                        <td>@test1.appYN_DESC</td>
+                        <td>@test1.hrYN_DESC</td>
+                        <td>@test1.cancelDESC</td>
+                        <td class="reasonTd">@test1.reason</td>
+                        <td>
+                            @*&nbsp;&nbsp;&nbsp;&nbsp;*@
+                            &nbsp;
+                            <input type="checkbox" class="chkBoxId" id="chkBoxId" value="@test1.reqNo" data-id1="@test1.appYN_DESC" data-id2="@test1.cancelDESC" data-id3="@test1.hrYN_DESC"/>
+                        </td>
+                        <td id="@(test1.reqNo)" class="tdtt" style="width:9.5%;" data-id="@test1.reqNo" data-id2="@test1.startDate" data-id3="@test1.personalCode">
+                            @* 파일 첨부 *@
+
+                            <input id="file-input" type="file" name="files" data-id="@test1.reqNo" style="width:80%;" />
+
+                        </td>
+
+                        <td class="fileDownload1">
+                            @* 다운로드 *@
+                            @if (@test1.filePath == "" || @test1.filePath == null)
+                            {
+                                <img src="~/images/download2.png" style="width:25px;" />
+                            }
+
+                            else
+                            {
+                                if (@test1.filePath.Substring(0, 4) == "http")
+                                {
+                                    <a asp-action="FileDownload2" asp-route-fileName="@test1.filePath" class="image-download2">
+                                        <img src="~/images/download1.png" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="FileDownload" asp-route-fileName="@test1.filePath" class="image-download2">
+                                        <img src="~/images/download1.png" />
+                                    </a>
+                                }
+
+                            }
+
+                            @*</div>*@
+                        </td>
+
+                        <td id="@(test1.reqNo)" class="tdttAfter" style="width:9.5%; display:none;" data-id="@test1.reqNo" data-id2="@test1.startDate" data-id3="@test1.personalCode">
+                            @* 파일 첨부#2 *@
+
+                            <input id="file-input" type="file" name="files2" data-id="@test1.reqNo" style="width:80%;" />
+
+                        </td>
+
+                        <td style="display:none;" class="fileDownload1After">
+                            @* 다운로드 #2 *@
+                            @if (@test1.afterFilePath == "" || @test1.afterFilePath == null)
+                            {
+                                <img src="~/images/download2.png" style="width:25px;" />
+                            }
+
+                            else
+                            {
+                                <a asp-action="FileDownload" asp-route-fileName="@test1.afterFilePath" class="image-download2">
+                                    <img src="~/images/download1.png" />
+                                </a>
+                            }
+
+                            @*</div>*@
+                        </td>
+
+
+                    </tr>
+                }
+
+
+            </table>
+        </form>
+        <script>
+            var fired_button;
+            var upload_button;
+            var upload_reqNo;
+            var upload_startDate;
+            var pSelectedDepartment;
+
+            $('.initSelRight').addClass('content1'); // content 내용 display none.
+            $('.sel3').addClass('content1');
+            $('.sel4').addClass('content1');
+            $('.sel5').addClass('content1');
+
+            pSelectedDepartment = '@ViewBag.pSelectedDepartment';
+            $('#sel1').click();
+            $('#sel1').val(pSelectedDepartment);
+
+
+            if ('@ViewBag.chkDel' == 'c') {
+                swal("삭제 실패!.", "이미 결재가 진행 된 문서가 존재합니다.", "error")
+            }
+
+            else if ('@ViewBag.chkDel' == 'f') {
+                swal("삭제 완료!", "삭제가 완료되었습니다.", "success");
+            }
+
+
+            // 삭제 버튼
+            $("button").click(function () {
+                fired_button = $(this).val();
+            });
+
+
+            
+            //첫번째 업로드.
+            $(".tdtt").change(function () { // td class.
+                upload_reqNo = $(this).data('id');
+                upload_button = 'upload';
+
+                upload_startDate = $(this).data('id2');
+                upload_personalCode = $(this).data('id3');
+                $('#selBtn1').click();
+            });
+
+            //두번째 업로드.
+            $(".tdttAfter").change(function () { // td class.
+                upload_reqNo = $(this).data('id');
+                upload_button = 'uploadAfter';
+
+                upload_startDate = $(this).data('id2');
+                upload_personalCode = $(this).data('id3');
+
+                $('#selBtn1').click();
+            });
+
+            var chkViewSel = "";
+
+            $('#viewSelRight').on('change', function () { // 첫번째 근태 select change,
+
+                var str = this.options[this.selectedIndex].value;
+
+                if (str == '001') { // 휴가를 선택했는지?
+                    $('.initSelRight').removeClass('content1');
+
+                    $('.sel3').addClass('content1');
+                    $('.sel4').addClass('content1');
+                    $('.sel5').addClass('content1');
+                }
+                else if (str == '002') { // 공가를 선택했는지?
+                    $('.sel3').removeClass('content1');
+
+                    $('.initSelRight').addClass('content1');
+                    $('.sel4').addClass('content1');
+                    $('.sel5').addClass('content1');
+
+
+                }
+
+                else if (str == '003') { // 병가를 선택했는지?
+                    $('.sel4').removeClass('content1');
+
+                    $('.initSelRight').addClass('content1');
+                    $('.sel3').addClass('content1');
+                    $('.sel5').addClass('content1');
+                }
+
+                else if (str == '004') { // 결근을 선택했는지?
+                    $('.sel5').removeClass('content1');
+
+                    $('.initSelRight').addClass('content1');
+                    $('.sel3').addClass('content1');
+                    $('.sel4').addClass('content1');
+                }
+
+                else if (str == '000') { // 근태코드 초기화
+                    $('.sel5').addClass('content1');
+                    $('.initSelRight').addClass('content1');
+                    $('.sel3').addClass('content1');
+                    $('.sel4').addClass('content1');
+                    $(this).val("");
+                }
+
+            });
+
+            getInitUserBrowser();
+
+            function getInitUserBrowser() {
+
+                // 사용자 브라우저는 화면 갱신 시 우선적으로 한번.
+                var departmentCode = $('#sel1').val();
+                var param = { "departmentCode": departmentCode };
+
+                if (departmentCode != null && departmentCode != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: "PeriWorks/OnGetUserName",
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                        data: param,
+
+                        dataType: "json",
+
+                        success: function (data) {
+
+                            var obj = JSON.parse(data);
+
+
+                            $("#selUsers").empty();
+                            $("#selUsers").append('<option value="' + "0" + '">' + "선택 초기화" + '</option>');
+                            $("#selUsers").selectpicker("refresh");
+
+                            $.each(obj, function (i, item) {
+                                var name = item.userName;
+                                var personal = item.personalCode;
+                                $("#selUsers").append('<option value="' + personal + '">' + name + '</option>');
+                                $("#selUsers").selectpicker("refresh");
+                            });
+
+                            if ('@ViewBag.userVal' != "0") {
+                               var userVal1 = '@ViewBag.userVal';
+                                $('#selUsers').val(userVal1);
+                                $("#selUsers").selectpicker("refresh");
+                             }
+                        },
+
+                        failure: function (data) {
+                            alert('fail!1');
+                            //alert(data.responseText);
+                        }, //End of AJAX failure function
+                        error: function (xhr) {
+                            // alert('fail!2');
+                            alert(xhr.status);
+                        } //End of AJAX error function
+
+                    });
+                }
+
+            }
+
+
+            //alert(userVal1);
+
+            ////////////////////////////////////////
+
+
+            $('#sel1').on('change', function () { // 부서 선택 시, 사용자 셀렉션
+
+                if ($('#sel1').val() == "0") {
+                    $('#sel1').val("");
+                }
+
+                else {
+                    var departmentCode = $(this).val();
+                    var param = { "departmentCode": departmentCode };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "PeriWorks/OnGetUserName",
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        //contentType: "'application/x-www-form-urlencoded; charset=utf-8'",
+                        data: param,
+
+                        dataType: "json",
+
+                        success: function (data) {
+
+                            var obj = JSON.parse(data);
+
+
+                            $("#selUsers").empty();
+                            $("#selUsers").append('<option value="' + "0" + '">' + "선택 초기화" + '</option>');
+                            $("#selUsers").selectpicker("refresh");
+
+                            $.each(obj, function (i, item) {
+                                var name = item.userName;
+                                var personal = item.personalCode;
+
+                                $("#selUsers").append('<option value="' + personal + '">' + name + '</option>');
+                                $("#selUsers").selectpicker("refresh");
+
+                            });
+
+                        },
+
+                        failure: function (data) {
+                            alert('fail!1');
+                            //alert(data.responseText);
+                        }, //End of AJAX failure function
+                        error: function (xhr) {
+                            // alert('fail!2');
+                            alert(xhr.status);
+                        } //End of AJAX error function
+
+                    });
+                }
+
+
+
+            });
+
+            $('#selUsers').on('change', function () {
+                if ($(this).val() == "0") {
+                    $(this).val('');
+                }
+            });
+
+            $('#sel3').on('change', function () { // 선택 초기화 1
+                if ($(this).val() == "000") {
+                    $(this).val('');
+                }
+            });
+
+            $('#initSelRight').on('change', function () { // 선택 초기화 2
+                if ($(this).val() == "000") {
+                    $(this).val('');
+                }
+            });
+
+            $('#sel4').on('change', function () { // 선택 초기화 3
+                if ($(this).val() == "000") {
+                    $(this).val('');
+                }
+            });
+
+            $('#sel5').on('change', function () { // 선택 초기화 4
+                if ($(this).val() == "000") {
+                    $(this).val('');
+                }
+            });
+
+
+            // server passed values.
+            if ('@Html.Raw(ViewBag.searchFirst.ToString())' == "001") {
+                var dep = '@Html.Raw(ViewBag.searchFirst.ToString())';
+                var dep2 = '@Html.Raw(ViewBag.searchSecond.ToString())';
+                //document.getElementById('selectedValSearch').value = '1';
+
+                $('#viewSelRight').val(dep);
+
+                $('.sel3').addClass('content1');
+                $('.sel4').addClass('content1');
+                $('.sel5').addClass('content1');
+
+                $('.initSelRight').removeClass('content1');
+                $('.initSelRight').val(dep2);
+            }
+
+            else if ('@Html.Raw(ViewBag.searchFirst.ToString())' == "002") {
+                var dep = '@Html.Raw(ViewBag.searchFirst.ToString())';
+                var dep2 = '@Html.Raw(ViewBag.searchSecond.ToString())';
+                //document.getElementById('selectedValSearch').value = '2';
+
+                $('#viewSelRight').val(dep);
+
+                $('.initSelRight').addClass('content1');
+                $('.sel4').addClass('content1');
+                $('.sel5').addClass('content1');
+
+                $('.sel3').removeClass('content1');
+                $('.sel3').val(dep2);
+            }
+
+            else if ('@Html.Raw(ViewBag.searchFirst.ToString())' == "003") { // 병가
+                var dep = '@Html.Raw(ViewBag.searchFirst.ToString())';
+                var dep2 = '@Html.Raw(ViewBag.searchSecond.ToString())';
+                //document.getElementById('selectedValSearch').value = '2';
+
+                $('#viewSelRight').val(dep);
+
+                $('.initSelRight').addClass('content1');
+                $('.sel3').addClass('content1');
+                $('.sel5').addClass('content1');
+
+                $('.sel4').removeClass('content1');
+                $('.sel4').val(dep2);
+            }
+
+            else if ('@Html.Raw(ViewBag.searchFirst.ToString())' == "004") { // 결근
+                var dep = '@Html.Raw(ViewBag.searchFirst.ToString())';
+                var dep2 = '@Html.Raw(ViewBag.searchSecond.ToString())';
+                //document.getElementById('selectedValSearch').value = '2';
+
+                $('#viewSelRight').val(dep);
+
+                $('.initSelRight').addClass('content1');
+                $('.sel3').addClass('content1');
+                $('.sel4').addClass('content1');
+
+                $('.sel5').removeClass('content1');
+                $('.sel5').val(dep2);
+            }
+
+            if ('@ViewBag.startDate2' != "") {
+                document.getElementById('startDate2').value = '@ViewBag.startDate2';
+                document.getElementById('endDate2').value = '@ViewBag.endDate2';
+                var departmentVal = '@Html.Raw(@ViewBag.departmentVal.ToString())';
+
+                var url = '@Html.Raw(@ViewBag.url.ToString())';
+
+            }
+
+            if ('@Html.Raw(ViewBag.searchFirst.ToString())' == "002" || '@Html.Raw(ViewBag.searchFirst.ToString())' == "003" || '@Html.Raw(ViewBag.searchFirst.ToString())' == "004") {
+                $('.fileDownload1After').css("display", "");
+                $('.fileDownload1').css("display", "");
+                $('.tdtt').css("display", "");
+                $('.tdttAfter').css("display", "");
+                $('.afterHeader').css("display", "");
+                $('.afterHeader2').css("display", "none");
+
+                var classReason = document.getElementsByClassName('reasonTd');
+
+                for (var i = 0, length = classReason.length; i < length; i++) {
+                    classReason[i].style.display = "block";
+                    classReason[i].style.overflow = "hidden";
+                    classReason[i].style.textOverflow = "ellipsis";
+                    classReason[i].style.whiteSpace = "nowrap";
+                    classReason[i].style.width = "180px";
+                }
+            }
+
+            else {
+                $('.fileDownload1After').css("display", "none");
+                $('.fileDownload1').css("display", "none");
+                $('.tdtt').css("display", "none");
+                $('.tdttAfter').css("display", "none");
+                $('.afterHeader').css("display", "none");
+                $('.afterHeader2').css("display", "");
+            }
+
+            function cancelAppr() {
+                var selectedVal = $('input[type=checkbox]:checked').map(function (_, el) {
+                    return $(el).val();
+                }).get(); // reqNo.
+
+                var appYN = $('input[type=checkbox]:checked').map(function (_, el) {
+                    return $(el).data('id1');
+                }).get(); // reqNo.
+
+                var cancelDESC = $('input[type=checkbox]:checked').map(function (_, el) {
+                    return $(el).data('id2');
+                }).get(); // reqNo.
+                
+                var hrDESC = $('input[type=checkbox]:checked').map(function (_, el) {
+                    return $(el).data('id3');
+                }).get(); // reqNo.
+
+                if (selectedVal == "") {
+                    swal("선택된 대상이 없습니다", "대상을 선택 해 주세요", "error");
+                    return false;
+                }
+
+                if (appYN != "결재완료" && appYN != "결재상신" && appYN != "결재진행") { // 결재완료나 결재 진행이 아니라면?
+                    swal("해당작업을 수행할 수 없습니다.", "결재 진행중인 정보가 아닙니다.", "error");
+                    return false;
+                }
+
+
+                if (cancelDESC == "취소완료") {
+                    swal("해당작업을 수행할 수 없습니다.", "이미 결재취소 처리 된 정보 입니다.", "error");
+                    return false;
+                }
+
+                if (hrDESC == "결재완료") {
+                    swal("해당작업을 수행할 수 없습니다.", "총무결재까지 완료된 건은 취소할 수 없습니다.", "error");
+                    return false;
+                }
+                var tempUrl = "http://gw.se-won.co.kr/UI/_EAPP/ERPRLogin.aspx?UserID=" + '@ViewBag.baseUserId' + "&reqNo=" + selectedVal + "&Lang=ko&EAID=28&gw_num=&htmltag=&NextUrl=%2fUI%2f_EAPP%2fEADocumentWrite.aspx%3fFormID%3d28&ErpDocTitle=";
+                var popOption = "width=950, height=750, resizable=yes, scrollbars=yes, status=no;";    //팝업창 옵션(optoin)
+
+                window.open(tempUrl, "", popOption);
+                
+                
+            }
+
+            function handle_form_submission2() {
+                var sel1 = document.getElementById('sel1').value;
+                var startValue = document.getElementById('startDate2').value;
+                var endValue = document.getElementById('endDate2').value;
+                //var tWorkCode = document.getElementById('sel3').value == "" ? document.getElementById('initSelRight').value : document.getElementById('sel3').value;
+                var tWorkCode = document.getElementById('viewSelRight').value;
+
+                var selectedDepartment = $('#sel1').val();
+
+                document.getElementById('selectedDepartment').value = selectedDepartment;
+                @* <td class="reasonTd" style="display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:180px;">@test1.reason</td> *@
+
+                if ((startValue == "" || endValue == "") && fired_button != "delBtn") {
+                    swal("에러입니다.", "날짜를 입력하여 주세요", "error");
+                    return false;
+                }
+
+                //else if (sel1 == "" && fired_button != "delBtn") {
+                //    swal("에러입니다.", "부서를 확인하여 주세요.", "error");
+                //    return false;
+                //}
+
+                //else if (tWorkCode == "" && fired_button != "delBtn") {
+                //    swal("에러입니다.", "근태코드를 확인하여 주세요.", "error");
+                //    return false;
+                //}
+
+                else if (fired_button != "delBtn") {
+                    swal("처리 중", "잠시만 기다려주세요", "success");
+                    if (upload_button == "upload") {
+                        document.getElementById('uploadHidden').value = upload_reqNo;
+                        document.getElementById('uploadStartDate').value = upload_startDate;
+                        document.getElementById('uploadPersonalCode').value = upload_personalCode;
+                    }
+
+                    else if (upload_button == "uploadAfter") {
+                        document.getElementById('uploadHiddenAfter').value = upload_reqNo;
+                        document.getElementById('uploadStartDateAfter').value = upload_startDate;
+                        document.getElementById('uploadPersonalCodeAfter').value = upload_personalCode;
+                    }
+
+                    else { // 일반 조회.
+                        //if ($("#viewSelRight").val() == "공가") {
+                        //    document.getElementById('checkAfterComponents').value = "c";
+                        //}
+                    }
+                    return true;
+                }
+
+                else if (fired_button == "delBtn") // 삭제버튼 눌렀을 때.
+                {
+                    var selectedVal = $('input[type=checkbox]:checked').map(function (_, el) {
+                        return $(el).val();
+                    }).get();
+
+                    if (selectedVal == "") {
+                        swal("선택된 대상이 없습니다", "대상을 선택 해 주세요", "error");
+                        return false;
+                    }
+
+                    document.getElementById('chkDelHidden').value = "c";
+                    document.getElementById('selectedChk').value = selectedVal;
+
+                    return true;
+                }
+
+                return true;
+            }
+
+            //$('.input-daterange input').datepicker({
+            //    format: 'yyyy-mm-dd',
+            //    language: 'ko'
+
+            //}).datepicker("setDate", 'now');
+
+            $('.input-daterange input').datepicker({
+                format: 'yyyy-mm-dd',
+                language: 'ko'
+
+            });
+
+            $('.input-daterange').datepicker({
+                autoclose: true
+            });
+        </script>
+    </div>
+
+}
